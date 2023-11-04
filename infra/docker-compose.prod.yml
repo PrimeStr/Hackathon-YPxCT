@@ -20,7 +20,7 @@ services:
       - db
       - redis
     restart: always
-    image: dnevskiy/careerhub_backend
+    image: primestr/careerhub_backend
     env_file: .env
     volumes:
       - static:/app/backend_static/
@@ -33,7 +33,7 @@ services:
 
   worker:
     container_name: careerhub-celery
-    image: dnevskiy/careerhub_backend
+    image: primestr/careerhub_backend
     hostname: worker
     entrypoint: celery
     command: -A core.celery.celery_app.app worker --loglevel=info
@@ -47,7 +47,7 @@ services:
     container_name: careerhub-frontend
     depends_on:
       - backend
-    image: dnevskiy/careerhub_frontend
+    image: primestr/careerhub_frontend
     command: cp -r /app/dist/. /frontend_static/
     volumes:
       - static:/app/dist/
@@ -57,7 +57,7 @@ services:
     depends_on:
       - frontend
     restart: always
-    image: dnevskiy/careerhub_nginx
+    image: primestr/careerhub_nginx
     volumes:
       - static:/app/static/
       - media:/app/media/
