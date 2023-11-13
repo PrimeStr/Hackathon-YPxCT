@@ -9,15 +9,15 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+SECRET_KEY = os.environ.get('SECRET_KEY', get_random_secret_key())
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(' ')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(' ')
 
-DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite3')  # sqlite3 или postgresql
+DB_ENGINE = os.environ.get('DB_ENGINE', 'sqlite3')  # sqlite3 или postgresql
 
-IS_LOGGING = os.getenv('IS_LOGGING', 'False') == 'True'
+IS_LOGGING = os.environ.get('IS_LOGGING', 'False') == 'True'
 
 if IS_LOGGING:
     LOGGING = {
@@ -95,11 +95,11 @@ if DB_ENGINE == 'postgresql':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', default='django'),
-            'USER': os.getenv('POSTGRES_USER', default='django_user'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='django'),
-            'HOST': os.getenv('DB_HOST', default='db'),
-            'PORT': os.getenv('DB_PORT', default=5432)
+            'NAME': os.environ.get('DB_NAME', default='django'),
+            'USER': os.environ.get('POSTGRES_USER', default='django_user'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='django'),
+            'HOST': os.environ.get('DB_HOST', default='db'),
+            'PORT': os.environ.get('DB_PORT', default=5432)
         }
     }
 
@@ -191,12 +191,12 @@ DJOSER = {
     },
 }
 
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'

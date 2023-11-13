@@ -35,6 +35,7 @@ services:
     container_name: careerhub-celery
     image: primestr/careerhub_backend
     hostname: worker
+    env_file: .env
     entrypoint: celery
     command: -A core.celery.celery_app.app worker --loglevel=info
     links:
