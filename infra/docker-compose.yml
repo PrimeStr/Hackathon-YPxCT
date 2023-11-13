@@ -38,6 +38,7 @@ services:
     build:
       context: ../backend
     hostname: worker
+    env_file: .env
     entrypoint: celery
     command: -A core.celery.celery_app.app worker --loglevel=info
     links:
@@ -52,12 +53,14 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    command: cp -r /app/dist/. /frontend_static/
     volumes:
-      - static:/app/dist
+      - static:/app/dist/
 
   nginx:
     container_name: careerhub-nginx
+    depends_on:
+      - backend
+      - frontend
     build:
       context: ../nginx
       dockerfile: Dockerfile

@@ -3,6 +3,10 @@
 
 ***
 
+Backend и Frontend части командного проекта в рамках Хакатона Яндекс Практикум Х Карьерный трекер "10.2023"
+
+***
+
 #### Ссылка на проект: [tracker-hiring.ddns.net](https://tracker-hiring.ddns.net)
 
 ***
