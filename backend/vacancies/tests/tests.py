@@ -54,7 +54,19 @@ class StudentViewSetTestCase(TestCase):
     def test_vacancy_match(self):
         response = self.authorized_client.get('/api/matching/1/')
         self.assertEqual(response.status_code, 200)
+
+        all_data = []
+        page_number = 1
+        while True:
+            response = self.authorized_client.get(
+                f'/api/matching/1/?page={page_number}')
+            data = response.json()
+            all_data.extend(data['results'])
+            if not data['next']:
+                break
+            page_number += 1
+
         desired_vacancy_id = 1
         self.assertTrue(
-            any(item['id'] == desired_vacancy_id for item in response.data)
+            any(item['id'] == desired_vacancy_id for item in all_data)
         )
