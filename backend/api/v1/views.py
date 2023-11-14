@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.status import (HTTP_404_NOT_FOUND, HTTP_201_CREATED,
                                    HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
                                    HTTP_200_OK)
-from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet, ViewSet
+from rest_framework.viewsets import (ReadOnlyModelViewSet,
+                                     ModelViewSet, ViewSet)
 
 from api.v1.permissions import (IsAuthorOrAdmin, IsVacancyAuthorOrAdmin,
                                 IsAdminUser)
@@ -198,7 +199,7 @@ class VacancyViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-class MatchingStudentsViewSet(ViewSet):
+class MatchingStudentsViewSet(ModelViewSet):
     """
     Этот ViewSet предоставляет список студентов, подходящих
     для конкретной вакансии.
@@ -222,18 +223,18 @@ class MatchingStudentsViewSet(ViewSet):
     """
     permission_classes = (IsVacancyAuthorOrAdmin,)
     pagination_class = CustomPagination
+    serializer_class = MatchingStudentSerializer
 
-    @staticmethod
-    def list(request: Any, vacancy_id: int) -> Response:
+    def list(self, request, *args, **kwargs):
+        vacancy_id = self.kwargs['vacancy_id']
         vacancy = get_object_or_404(Vacancy, id=vacancy_id)
         required_skills = vacancy.required_skills.all()
 
-        matching_students = Student.objects.filter(
-            skills__in=required_skills)
+        matching_students = Student.objects.filter(skills__in=required_skills)
 
         filters = {}
         for param in ['location', 'education_level', 'schedule']:
-            value = request.query_params.get(param)
+            value = self.request.query_params.get(param)
             if value:
                 filters[param] = value
 
@@ -242,17 +243,16 @@ class MatchingStudentsViewSet(ViewSet):
 
         matching_students = sorted(
             matching_students,
-            key=lambda student: len(
-                set(required_skills) & set(student.skills.all())),
+            key=lambda student: len(set(required_skills)
+                                    & set(student.skills.all())),
             reverse=True
         )
 
-        serializer = MatchingStudentSerializer(
-            matching_students,
-            many=True,
-            context={'vacancy_id': vacancy_id}
-        )
-        return Response(serializer.data)
+        page = self.paginate_queryset(matching_students)
+        serializer = self.get_serializer(page,
+                                         many=True,
+                                         context={'vacancy_id': vacancy_id})
+        return self.get_paginated_response(serializer.data)
 
 
 class FavoriteStudentViewSet(ViewSet):
@@ -280,6 +280,7 @@ class FavoriteStudentViewSet(ViewSet):
         - HTTP_404_NOT_FOUND: Если студент не найден в
         избранном (при удалении).
     """
+
     @staticmethod
     def get_favorites(request) -> Response:
         """Предоставляет список избранных студентов."""
@@ -347,6 +348,7 @@ class CompareStudentViewSet(ViewSet):
         - HTTP_404_NOT_FOUND: Если студент не найден в списке
         сравнения (при удалении).
     """
+
     @staticmethod
     def get_compare(request) -> Response:
         """Возвращает список студентов в списке сравнения."""
