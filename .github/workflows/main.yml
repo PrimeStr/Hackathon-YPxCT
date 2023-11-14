@@ -148,8 +148,8 @@ jobs:
 
           script: |
             cd careerhub
-            sudo docker compose -f docker-compose.prod.yml pull
-            sudo docker compose -f docker-compose.prod.yml down
+            sudo docker-compose -f docker-compose.prod.yml pull
+            sudo docker-compose -f docker-compose.prod.yml down
 
             sudo rm .env
             touch .env
@@ -172,11 +172,11 @@ jobs:
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
             echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env
 
-            sudo docker compose -f docker-compose.prod.yml up -d
-            sudo docker compose -f docker-compose.prod.yml exec backend python manage.py makemigrations
-            sudo docker compose -f docker-compose.prod.yml exec backend python manage.py migrate
-            sudo docker compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --noinput
-            sudo docker compose -f docker-compose.prod.yml exec backend python manage.py loaddata testdb.json
+            sudo docker-compose -f docker-compose.prod.yml up -d
+            sudo docker-compose -f docker-compose.prod.yml exec backend python manage.py makemigrations
+            sudo docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate
+            sudo docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --noinput
+            sudo docker-compose -f docker-compose.prod.yml exec backend python manage.py loaddata testdb.json
             sudo systemctl restart nginx
 
   send_message_via_telegram:
