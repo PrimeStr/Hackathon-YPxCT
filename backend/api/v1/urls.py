@@ -14,9 +14,9 @@ router.register(r'users', CustomUserViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'vacancies', VacancyViewSet, basename='vacancies')
 router.register(r'locations', LocationView, basename='location'),
-router.register(r'courses', EducationLevelView,
-                basename='education-level'),
-router.register(r'education_levels', CourseView, basename='course'),
+router.register(r'courses', CourseView, basename='course'),
+router.register(r'education_levels', EducationLevelView,
+                basename='education_levels'),
 router.register(r'schedules', ScheduleView, basename='schedule'),
 router.register(r'skills', SkillView, basename='skills'),
 router.register(r'specializations', SpecializationView,
