@@ -17,6 +17,13 @@ class IsAuthorOrAdmin(BasePermission):
     message = "Только автор и администратор могут редактировать этот объект."
 
     @staticmethod
+    def has_permission(request, view):
+        # Проверяем является ли пользователь автором вакансии.
+        if request.user.is_anonymous:
+            return False
+        return True
+
+    @staticmethod
     def has_object_permission(request, view, obj) -> bool:
         """
         Определяет, имеет ли пользователь доступ к объекту.
