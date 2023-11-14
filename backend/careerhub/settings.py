@@ -161,6 +161,8 @@ SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
 }
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 FORCE_SCRIPT_NAME = "/"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
