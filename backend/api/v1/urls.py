@@ -3,7 +3,9 @@ from rest_framework.routers import DefaultRouter
 
 from api.v1.views import (StudentViewSet, VacancyViewSet,
                           MatchingStudentsViewSet, FavoriteStudentViewSet,
-                          CompareStudentViewSet)
+                          CompareStudentViewSet, LocationView,
+                          EducationLevelView, CourseView, ScheduleView,
+                          SkillView, SpecializationView)
 from users.views import CustomUserViewSet
 
 router = DefaultRouter()
@@ -11,6 +13,14 @@ router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'students', StudentViewSet)
 router.register(r'vacancies', VacancyViewSet, basename='vacancies')
+router.register(r'locations', LocationView, basename='location'),
+router.register(r'courses', EducationLevelView,
+                basename='education-level'),
+router.register(r'education_levels', CourseView, basename='course'),
+router.register(r'schedules', ScheduleView, basename='schedule'),
+router.register(r'skills', SkillView, basename='skills'),
+router.register(r'specializations', SpecializationView,
+                basename='specialization'),
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -34,5 +44,4 @@ urlpatterns = [
         {'post': 'post', 'delete': 'delete'})
          ),
     path('compare/', CompareStudentViewSet.as_view({'get': 'get_compare'})),
-
 ]

@@ -1,7 +1,8 @@
 from typing import Any, Tuple, Dict
 
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
+                                        IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework.status import (HTTP_404_NOT_FOUND, HTTP_201_CREATED,
                                    HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
@@ -13,10 +14,69 @@ from api.v1.permissions import (IsAuthorOrAdmin, IsVacancyAuthorOrAdmin,
 from api.v1.serializers import (StudentSerializer, StudentDetailSerializer,
                                 VacancySerializer, VacancyReadSerializer,
                                 MatchingStudentSerializer,
-                                VacancySmallReadSerializer)
+                                VacancySmallReadSerializer, LocationSerializer,
+                                EducationLevelSerializer, CourseSerializer,
+                                ScheduleSerializer, SkillSerializer,
+                                SpecializationSerializer)
 from core.pagination import CustomPagination
+from shared_info.models import (Location, EducationLevel, Course,
+                                Schedule, Skill, Specialization)
 from students.models import Student, FavoriteStudent, CompareStudent
 from vacancies.models import Vacancy
+
+
+class LocationView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список городов.
+    """
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class EducationLevelView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список грейдов.
+    """
+    queryset = EducationLevel.objects.all()
+    serializer_class = EducationLevelSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class CourseView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список курсов.
+    """
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class ScheduleView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список графиков работы.
+    """
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class SkillView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список скиллов.
+    """
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class SpecializationView(ReadOnlyModelViewSet):
+    """
+    Этот ViewSet предоставляет список специализаций.
+    """
+    queryset = Specialization.objects.all()
+    serializer_class = SpecializationSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class StudentViewSet(ReadOnlyModelViewSet):
