@@ -147,10 +147,13 @@ class VacancyViewSet(ModelViewSet):
             QuerySet: QuerySet вакансий в соответствии с правами
             доступа пользователя.
         """
+        if getattr(self, 'swagger_fake_view', False):
+            return Vacancy.objects.none()
+
         user = self.request.user
-        if not user.is_anonymous:
-            if user.is_admin:
-                return Vacancy.objects.all()
+
+        if user.is_admin:
+            return Vacancy.objects.all()
 
         return Vacancy.objects.filter(author=user)
 
@@ -280,6 +283,7 @@ class FavoriteStudentViewSet(ViewSet):
         - HTTP_404_NOT_FOUND: Если студент не найден в
         избранном (при удалении).
     """
+    permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def get_favorites(request) -> Response:
@@ -348,6 +352,7 @@ class CompareStudentViewSet(ViewSet):
         - HTTP_404_NOT_FOUND: Если студент не найден в списке
         сравнения (при удалении).
     """
+    permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def get_compare(request) -> Response:
