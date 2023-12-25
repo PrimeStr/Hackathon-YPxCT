@@ -48,9 +48,10 @@ services:
     container_name: careerhub-frontend
     depends_on:
       - backend
+    command: cp -r /app/dist/. /app/static/.
     image: primestr/careerhub_frontend
     volumes:
-      - static:/app/dist/
+      - static:/app/static/
 
   nginx:
     container_name: careerhub-nginx
@@ -62,4 +63,4 @@ services:
       - static:/app/static/
       - media:/app/media/
     ports:
-      - "8500:80"
+      - "80:80"

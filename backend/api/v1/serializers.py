@@ -110,6 +110,7 @@ class LocationSerializer(ModelSerializer):
         id (int): Идентификатор локации.
         name (str): Название локации.
     """
+    id = IntegerField()
 
     class Meta:
         model = Location
@@ -245,7 +246,7 @@ class VacancyReadSerializer(ModelSerializer):
     schedule = ScheduleSerializer(many=True)
     specialization = SpecializationSerializer(many=True)
     required_education_level = EducationLevelSerializer(many=True)
-    location = LocationSerializer()
+    location = LocationSerializer(read_only=True)
 
     class Meta:
         model = Vacancy
@@ -351,6 +352,22 @@ class VacancySpecializationSerializer(ModelSerializer):
         )
 
 
+class VacancyLocationSerializer(ModelSerializer):
+    """
+        Сериализатор для связи между моделями Vacancy и Location.
+
+        Attributes:
+            id (int, write-only): Идентификатор локации.
+        """
+    id = IntegerField(write_only=True)
+
+    class Meta:
+        model = Location
+        fields = (
+            'id',
+        )
+
+
 class VacancySerializer(ModelSerializer):
     """
     Сериализатор для модели Vacancy.
@@ -370,6 +387,7 @@ class VacancySerializer(ModelSerializer):
     """
     author = CustomUserSerializer(read_only=True)
     id = IntegerField(read_only=True)
+    location = VacancyLocationSerializer(read_only=True)
     required_skills = VacancySkillSerializer(many=True)
     schedule = VacancyScheduleSerializer(many=True)
     specialization = VacancySpecializationSerializer(many=True)
